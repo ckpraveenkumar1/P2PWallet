@@ -1,0 +1,43 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: p2p-wallet
+
+  datasource:
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/p2pwallet}
+    username: ${DATABASE_USERNAME:wallet}
+    password: ${DATABASE_PASSWORD:wallet_secret}
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 5000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info
+  endpoint:
+    health:
+      show-details: always
+  metrics:
+    tags:
+      application: p2p-wallet
+
+app:
+  auth:
+    tokens: ${USER_TOKENS:alice:tok_alice,bob:tok_bob,charlie:tok_charlie,dave:tok_dave}
